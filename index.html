@@ -345,17 +345,6 @@ section.section-active .card{
         display:block;
     }
 }
-<script>
-// ===============================
-// MENÚ MÓVIL
-// ===============================
-const menuToggle = document.getElementById('menuToggle');
-const nav = document.querySelector('nav');
-
-menuToggle.addEventListener('click', () => {
-    nav.classList.toggle('open');
-});
-</script>
 /* ===============================
    MENÚ MÓVIL DESPLEGABLE
 ================================ */
@@ -371,23 +360,17 @@ menuToggle.addEventListener('click', () => {
     z-index:2000;
 }
 
+/* ===============================
+   MENÚ MÓVIL FUNCIONAL
+================================ */
+
 .menu-links{
     display:flex;
+    gap:0;
 }
 
-/* VERSIÓN MÓVIL */
+/* SOLO MÓVIL */
 @media(max-width:768px){
-
-    nav{
-        position:sticky;
-        top:0;
-        justify-content:flex-start;
-        padding:10px 0;
-    }
-
-    .menu-toggle{
-        display:block;
-    }
 
     .menu-links{
         position:absolute;
@@ -397,17 +380,24 @@ menuToggle.addEventListener('click', () => {
         flex-direction:column;
         background:rgba(2,6,23,.97);
         backdrop-filter:blur(12px);
-        max-height:0;
-        overflow:hidden;
-        transition:max-height .5s ease;
+
+        opacity:0;
+        transform:translateY(-10px);
+        pointer-events:none;
+
+        transition:
+            opacity .4s ease,
+            transform .4s ease;
     }
 
     .menu-links.open{
-        max-height:500px;
+        opacity:1;
+        transform:translateY(0);
+        pointer-events:auto;
     }
 
     .menu-links a{
-        padding:16px;
+        padding:18px;
         text-align:center;
         border-bottom:1px solid rgba(255,255,255,.08);
     }
@@ -737,7 +727,38 @@ appleSections.forEach(section => {
        menuLinks.classList.toggle('open');
    });
 });
+// ===============================
+// FIX MENÚ MÓVIL (ABRE Y CIERRA)
+// ===============================
+document.addEventListener('DOMContentLoaded', () => {
 
+    const menuToggle = document.getElementById('menuToggle');
+    const menuLinks  = document.getElementById('menuLinks');
+
+    if (menuToggle && menuLinks) {
+        menuToggle.addEventListener('click', () => {
+            menuLinks.classList.toggle('open');
+        });
+    }
+
+});
+// ===============================
+// MENÚ MÓVIL (FIX FINAL)
+// ===============================
+const menuToggle = document.getElementById('menuToggle');
+const menuLinks  = document.getElementById('menuLinks');
+
+menuToggle.addEventListener('click', () => {
+    menuLinks.classList.toggle('open');
+});
+</script>
+<script>
+const menuToggle = document.getElementById('menuToggle');
+const nav = document.querySelector('nav');
+
+menuToggle.addEventListener('click', () => {
+    nav.classList.toggle('open');
+});
 </script>
 
 </body>
