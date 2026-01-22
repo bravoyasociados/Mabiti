@@ -284,6 +284,134 @@ section:hover h2{
     letter-spacing:2px;
     color:#38bdf8;
 }
+/* ===============================
+   TRANSICIÓN APPLE ENTRE SECCIONES
+================================ */
+
+section{
+    opacity: 0.85;
+    transform: scale(0.97);
+    transition:
+        opacity 0.8s ease,
+        transform 0.8s ease,
+        box-shadow 0.8s ease;
+}
+
+/* SECCIÓN ACTIVA (VISIBLE) */
+section.section-active{
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* ILUMINACIÓN PROGRESIVA */
+section.section-active .card{
+    box-shadow:
+        0 35px 70px rgba(0,0,0,.55),
+        0 0 40px rgba(56,189,248,.25);
+    border-color: rgba(56,189,248,.35);
+}
+/* ===============================
+   MENÚ MÓVIL DESPLEGABLE
+================================ */
+
+.menu-toggle{
+    display:none;
+    background:none;
+    border:none;
+    color:#38bdf8;
+    font-size:1.8rem;
+    padding:15px;
+    cursor:pointer;
+}
+
+@media(max-width:768px){
+    nav{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .menu-toggle{
+        display:block;
+    }
+
+    nav a{
+        width:100%;
+        display:none;
+        padding:15px 25px;
+        border-top:1px solid rgba(255,255,255,.1);
+    }
+
+    nav.open a{
+        display:block;
+    }
+}
+<script>
+// ===============================
+// MENÚ MÓVIL
+// ===============================
+const menuToggle = document.getElementById('menuToggle');
+const nav = document.querySelector('nav');
+
+menuToggle.addEventListener('click', () => {
+    nav.classList.toggle('open');
+});
+</script>
+/* ===============================
+   MENÚ MÓVIL DESPLEGABLE
+================================ */
+
+.menu-toggle{
+    display:none;
+    position:absolute;
+    right:20px;   /* 🔥 AQUÍ queda a la derecha */
+    top:12px;
+    font-size:2rem;
+    cursor:pointer;
+    color:#38bdf8;
+    z-index:2000;
+}
+
+.menu-links{
+    display:flex;
+}
+
+/* VERSIÓN MÓVIL */
+@media(max-width:768px){
+
+    nav{
+        position:sticky;
+        top:0;
+        justify-content:flex-start;
+        padding:10px 0;
+    }
+
+    .menu-toggle{
+        display:block;
+    }
+
+    .menu-links{
+        position:absolute;
+        top:100%;
+        left:0;
+        width:100%;
+        flex-direction:column;
+        background:rgba(2,6,23,.97);
+        backdrop-filter:blur(12px);
+        max-height:0;
+        overflow:hidden;
+        transition:max-height .5s ease;
+    }
+
+    .menu-links.open{
+        max-height:500px;
+    }
+
+    .menu-links a{
+        padding:16px;
+        text-align:center;
+        border-bottom:1px solid rgba(255,255,255,.08);
+    }
+}
 
 </style>
 </head>
@@ -316,11 +444,15 @@ section:hover h2{
 </header>
 
 <nav>
-    <a href="#inicio">Inicio</a>
-    <a href="#streaming">Streaming</a>
-    <a href="#seguros">Seguros</a>
-    <a href="#legal">Legal</a>
-    <a href="#contacto">Contacto</a>
+    <div class="menu-toggle" id="menuToggle">☰</div>
+
+    <div class="menu-links" id="menuLinks">
+        <a href="#inicio">Inicio</a>
+        <a href="#streaming">Streaming</a>
+        <a href="#seguros">Seguros</a>
+        <a href="#legal">Legal</a>
+        <a href="#contacto">Contacto</a>
+    </div>
 </nav>
 
 <section id="inicio">
@@ -573,6 +705,38 @@ animateNetwork();
 
         observer.observe(section);
     });
+// ===============================
+// SECCIONES ACTIVAS TIPO APPLE
+// ===============================
+const appleSections = document.querySelectorAll('section');
+
+const appleObserver = new IntersectionObserver(
+    entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('section-active');
+            } else {
+                entry.target.classList.remove('section-active');
+            }
+        });
+    },
+    {
+        threshold: 0.35
+    }
+);
+
+appleSections.forEach(section => {
+    appleObserver.observe(section);
+// ===============================
+   // MENÚ HAMBURGUESA MÓVIL
+   // ===============================
+   const menuToggle = document.getElementById('menuToggle');
+   const menuLinks = document.getElementById('menuLinks');
+
+   menuToggle.addEventListener('click', () => {
+       menuLinks.classList.toggle('open');
+   });
+});
 
 </script>
 
